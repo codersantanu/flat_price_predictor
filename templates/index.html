@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHONAR BARI HEIGHTS</title>
+    <title>Venera Homes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <form action="" id="flat-details">
         <h1>Select your flat details</h1>
         <label for="area">Area:</label>
-        <input type="number" id="area" name="area" placeholder="Enter area in sq. ft." required>
+        <input type="number" id="area" name="area" placeholder="Enter area in sq. ft." required min="1">
         <br>
         <label for="facing">Facing:</label>
         <select id="facing" name="facing" required>
@@ -25,15 +25,25 @@
 
         <br>
         <label for="floor">Floor:</label>
-        <input type="number" id="floor" name="floor" placeholder="Enter floor" required>
+        <input type="number" id="floor" name="floor" placeholder="Enter floor" required min="1">
         <br>
         <label for="bedrooms">Bedrooms:</label>
-        <input type="number" id="bedrooms" name="bedrooms" placeholder="Enter bedrooms" required>
+        <input type="number" id="bedrooms" name="bedrooms" placeholder="Enter bedrooms" required min="1">
         <br>
         <label for="car-parking">Car Parking:</label>
-        <input type="number" id="car-parking" name="car-parking" placeholder="Enter car parking" required>
+        <input type="number" id="car-parking" name="car-parking" placeholder="Enter car parking" required min="0">
         <br>
-        <button type="submit" id="predict-price">Predict Price</button>
+        <button type="submit" id="predict-price">Predict Price</button><br>
+
+        <div class="output-group">
+        <label for="output">Predicted Price:</label>
+        <input
+            type="text"
+            id="output"
+            name="output"
+            placeholder="Your predicted price will appear here"
+            readonly>
+        </div>
 
     </form>
 </body>
