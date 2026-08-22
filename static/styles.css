@@ -1,17 +1,84 @@
 body {
-    background-color: rgb(172, 204, 215);
+    background-image: url("../static/images/building.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    font-size: 25px;
+   
+    /* font-family: Georgia, serif; */
+    font-family: "Segoe UI", Arial, sans-serif;
+
+
 }
+
+#flat-name {
+    text-align: center;
+    color: #32393d;
+    font-size: 3rem;
+    margin-top: 50px;
+}
+
 #flat-details {
-    max-width: 400px;
+    max-width: 450px;
     margin: 50px auto;
     padding: 30px;
 
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 
-    background-color: #ffffff;
-    border-radius: 15px;
+    /* Glass effect */
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(5px);
 
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+    /* Glass border */
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+
+    /* Shadow */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    
 }
+
+#flat-details h1 {
+    text-align: center;
+    color: #ffffff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+#flat-details label{
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+#flat-details input, #flat-details select, #flat-details button {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+#area, #facing, #floor, #bedrooms, #car-parking {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #f5a400;
+    color: #111827;
+}
+
+#facing {
+    background: #f5a400;
+    color: #111827;
+}
+#predict-price {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background: #d6bb20cb;
+    color: #111827;
+    cursor: pointer;
+}
+
