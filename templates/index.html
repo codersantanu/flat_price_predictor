@@ -1,4 +1,15 @@
-<form action="/predict" method="post" id="flat-details">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venera Homes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 id="flat-name">Venera Premium Residentials</h1>
+
+    <form action="/predict" method="post" id="flat-details">
     <h1>Select your flat details</h1>
 
     <label for="area">Area:</label>
@@ -119,3 +130,5 @@
         }
     });
 </script>
+</body>
+</html>
