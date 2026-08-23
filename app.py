@@ -39,6 +39,7 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
 
+    # Check model
     if model is None:
         return jsonify({
             "error": "Model not loaded on server."
@@ -46,15 +47,44 @@ def predict():
 
     try:
 
-        # Get values from HTML form
+        # -----------------------------
+        # Get data from HTML
+        # -----------------------------
+
         area = float(request.form.get("area"))
         facing = request.form.get("facing")
         floor = float(request.form.get("floor"))
         bedrooms = float(request.form.get("bedrooms"))
         car_parking = float(request.form.get("car_parking"))
 
+
         # -----------------------------
-        # Encode categorical variable
+        # Validate input
+        # -----------------------------
+
+        if area <= 0:
+            return jsonify({
+                "error": "Area must be greater than 0"
+            }), 400
+
+        if floor <= 0:
+            return jsonify({
+                "error": "Floor must be greater than 0"
+            }), 400
+
+        if bedrooms <= 0:
+            return jsonify({
+                "error": "Bedrooms must be greater than 0"
+            }), 400
+
+        if car_parking < 0:
+            return jsonify({
+                "error": "Car parking cannot be negative"
+            }), 400
+
+
+        # -----------------------------
+        # Facing encoding
         # -----------------------------
 
         facing_map = {
@@ -64,7 +94,13 @@ def predict():
             "South": 4
         }
 
-        facing_value = facing_map[facing]
+        facing_value = facing_map.get(facing)
+
+        if facing_value is None:
+            return jsonify({
+                "error": "Invalid facing value"
+            }), 400
+
 
         # -----------------------------
         # Create model input
@@ -78,31 +114,58 @@ def predict():
             car_parking
         ]
 
-        input_array = np.array(input_values).reshape(1, -1)
+        input_array = np.array(
+            input_values
+        ).reshape(1, -1)
 
-        logging.info("Input: %s", input_array)
+        logging.info(
+            "Model input: %s",
+            input_array
+        )
+
 
         # -----------------------------
-        # Prediction
+        # Make prediction
         # -----------------------------
 
         prediction = model.predict(input_array)
 
         predicted_price = float(prediction[0])
 
-        logging.info("Prediction: %s", predicted_price)
+
+        logging.info(
+            "Predicted price: %s",
+            predicted_price
+        )
+
 
         # -----------------------------
-        # Return JSON
+        # Send result to JavaScript
         # -----------------------------
 
         return jsonify({
             "prediction": predicted_price
         })
 
+
+    except ValueError as e:
+
+        logging.exception(
+            "Invalid input: %s",
+            e
+        )
+
+        return jsonify({
+            "error": "Please enter valid numeric values."
+        }), 400
+
+
     except Exception as e:
 
-        logging.exception("Prediction failed: %s", e)
+        logging.exception(
+            "Prediction failed: %s",
+            e
+        )
 
         return jsonify({
             "error": "Prediction failed",
@@ -115,6 +178,7 @@ def predict():
 # -----------------------------
 
 if __name__ == "__main__":
+
     app.run(
         debug=True,
         host="127.0.0.1",

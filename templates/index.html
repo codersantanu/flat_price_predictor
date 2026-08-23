@@ -1,134 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Venera Homes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles.css') }}"
+    >
 </head>
+
 <body>
-    <h1 id="flat-name">Venera Premium Residentials</h1>
 
-    <form action="/predict" method="post" id="flat-details">
-    <h1>Select your flat details</h1>
+    <h1 id="flat-name">
+        Venera Premium Residentials
+    </h1>
 
-    <label for="area">Area:</label>
-    <input
-        type="number"
-        id="area"
-        name="area"
-        placeholder="Enter area in sq. ft."
-        required
-        min="1"
+
+    <!-- ==============================
+         FLAT DETAILS FORM
+    =============================== -->
+
+    <form
+        action="/predict"
+        method="post"
+        id="flat-details"
     >
-    <br>
 
-    <label for="facing">Facing:</label>
-    <select id="facing" name="facing" required>
-        <option value="">Select Facing</option>
-        <option value="East">East</option>
-        <option value="West">West</option>
-        <option value="North">North</option>
-        <option value="South">South</option>
-    </select>
+        <h1>Select your flat details</h1>
 
-    <br>
 
-    <label for="floor">Floor:</label>
-    <input
-        type="number"
-        id="floor"
-        name="floor"
-        placeholder="Enter floor"
-        required
-        min="1"
-    >
-    <br>
+        <!-- Area -->
 
-    <label for="bedrooms">Bedrooms:</label>
-    <input
-        type="number"
-        id="bedrooms"
-        name="bedrooms"
-        placeholder="Enter bedrooms"
-        required
-        min="1"
-    >
-    <br>
-
-    <label for="car_parking">Car Parking:</label>
-    <input
-        type="number"
-        id="car_parking"
-        name="car_parking"
-        placeholder="Enter car parking"
-        required
-        min="0"
-    >
-    <br>
-
-    <button type="submit" id="predict-price">
-        Predict Price
-    </button>
-
-    <br>
-
-    <div class="output-group">
-        <label for="output">Predicted Price:</label>
+        <label for="area">
+            Area:
+        </label>
 
         <input
-            type="text"
-            id="output"
-            placeholder="Your predicted price will appear here"
-            readonly
+            type="number"
+            id="area"
+            name="area"
+            placeholder="Enter area in sq. ft."
+            required
+            min="1"
         >
-    </div>
-</form>
 
-<script>
-    const form = document.getElementById("flat-details");
-    const output = document.getElementById("output");
+        <br>
 
-    form.addEventListener("submit", async function(event) {
 
-        // Stop normal form submission
-        event.preventDefault();
+        <!-- Facing -->
 
-        output.value = "Predicting...";
+        <label for="facing">
+            Facing:
+        </label>
 
-        // Collect form data
-        const formData = new FormData(form);
+        <select
+            id="facing"
+            name="facing"
+            required
+        >
 
-        try {
+            <option value="">
+                Select Facing
+            </option>
 
-            // Send data to Flask
-            const response = await fetch("/predict", {
-                method: "POST",
-                body: formData
-            });
+            <option value="East">
+                East
+            </option>
 
-            // Convert Flask response to JSON
-            const data = await response.json();
+            <option value="West">
+                West
+            </option>
 
-            if (data.prediction !== undefined) {
+            <option value="North">
+                North
+            </option>
 
-                // Display prediction
-                output.value = "₹ " + data.prediction.toLocaleString("en-IN");
+            <option value="South">
+                South
+            </option>
 
-            } else {
+        </select>
 
-                output.value = "Prediction failed";
+        <br>
 
-                console.error(data.error);
+
+        <!-- Floor -->
+
+        <label for="floor">
+            Floor:
+        </label>
+
+        <input
+            type="number"
+            id="floor"
+            name="floor"
+            placeholder="Enter floor"
+            required
+            min="1"
+        >
+
+        <br>
+
+
+        <!-- Bedrooms -->
+
+        <label for="bedrooms">
+            Bedrooms:
+        </label>
+
+        <input
+            type="number"
+            id="bedrooms"
+            name="bedrooms"
+            placeholder="Enter bedrooms"
+            required
+            min="1"
+        >
+
+        <br>
+
+
+        <!-- Car Parking -->
+
+        <label for="car_parking">
+            Car Parking:
+        </label>
+
+        <input
+            type="number"
+            id="car_parking"
+            name="car_parking"
+            placeholder="Enter car parking"
+            required
+            min="0"
+        >
+
+        <br>
+
+
+        <!-- Predict Button -->
+
+        <button
+            type="submit"
+            id="predict-price"
+        >
+            Predict Price
+        </button>
+
+        <br>
+
+
+        <!-- Prediction Output -->
+
+        <div class="output-group">
+
+            <label for="output">
+                Predicted Price:
+            </label>
+
+            <input
+                type="text"
+                id="output"
+                placeholder="Your predicted price will appear here"
+                readonly
+            >
+
+        </div>
+
+    </form>
+
+
+    <!-- ==============================
+         JAVASCRIPT
+    =============================== -->
+
+    <script>
+
+        // Get form and output elements
+        const form = document.getElementById("flat-details");
+        const output = document.getElementById("output");
+
+
+        // When user clicks Predict Price
+        form.addEventListener("submit", async function(event) {
+
+            // Stop normal form submission
+            event.preventDefault();
+
+
+            // Show loading message
+            output.value = "Predicting...";
+
+
+            // Collect form data
+            const formData = new FormData(form);
+
+
+            try {
+
+                // Send data to Flask
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    body: formData
+                });
+
+
+                // Convert Flask response to JSON
+                const data = await response.json();
+
+
+                // Check whether Flask returned an error
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error || "Prediction failed"
+                    );
+
+                }
+
+
+                // Check prediction exists
+                if (data.prediction !== undefined) {
+
+                    // Display prediction
+                    output.value =
+                        "₹ " +
+                        data.prediction.toLocaleString("en-IN");
+
+                }
+
+                else {
+
+                    output.value = "Prediction failed";
+
+                }
+
+
             }
 
-        } catch (error) {
+            catch (error) {
 
-            console.error(error);
+                console.error("Error:", error);
 
-            output.value = "Server error";
-        }
-    });
-</script>
+                output.value = error.message;
+
+            }
+
+        });
+
+    </script>
+
 </body>
+
 </html>
