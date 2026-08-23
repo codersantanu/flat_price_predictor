@@ -2,19 +2,23 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<<<<<<< HEAD
-    <form action="/predict" method="post" id="flat-details">
-=======
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Venera Homes</title>
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='styles.css') }}"
     >
+
 </head>
+
 
 <body>
 
@@ -33,7 +37,6 @@
         id="flat-details"
     >
 
->>>>>>> feature-color-form-1
         <h1>Select your flat details</h1>
 
 
@@ -126,10 +129,6 @@
         >
 
         <br>
-<<<<<<< HEAD
-        <label for="car_parking">Car Parking:</label>
-        <input type="number" id="car_parking" name="car_parking" placeholder="Enter car parking" required min="0">
-=======
 
 
         <!-- Car Parking -->
@@ -147,7 +146,6 @@
             min="0"
         >
 
->>>>>>> feature-color-form-1
         <br>
 
 
@@ -189,77 +187,86 @@
 
     <script>
 
-        // Get form and output elements
-        const form = document.getElementById("flat-details");
-        const output = document.getElementById("output");
+        const form =
+            document.getElementById("flat-details");
+
+        const output =
+            document.getElementById("output");
 
 
-        // When user clicks Predict Price
-        form.addEventListener("submit", async function(event) {
+        form.addEventListener(
+            "submit",
+            async function(event) {
 
-            // Stop normal form submission
-            event.preventDefault();
+                event.preventDefault();
 
-
-            // Show loading message
-            output.value = "Predicting...";
+                output.value = "Predicting...";
 
 
-            // Collect form data
-            const formData = new FormData(form);
+                const formData =
+                    new FormData(form);
 
 
-            try {
+                try {
 
-                // Send data to Flask
-                const response = await fetch("/predict", {
-                    method: "POST",
-                    body: formData
-                });
+                    const response =
+                        await fetch("/predict", {
+
+                            method: "POST",
+
+                            body: formData
+
+                        });
 
 
-                // Convert Flask response to JSON
-                const data = await response.json();
+                    const data =
+                        await response.json();
 
 
-                // Check whether Flask returned an error
-                if (!response.ok) {
+                    if (!response.ok) {
 
-                    throw new Error(
-                        data.error || "Prediction failed"
+                        throw new Error(
+                            data.error ||
+                            "Prediction failed"
+                        );
+
+                    }
+
+
+                    if (
+                        data.prediction !== undefined
+                    ) {
+
+                        output.value =
+                            "₹ " +
+                            data.prediction
+                                .toLocaleString("en-IN");
+
+                    }
+
+                    else {
+
+                        output.value =
+                            "Prediction failed";
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Error:",
+                        error
                     );
 
-                }
-
-
-                // Check prediction exists
-                if (data.prediction !== undefined) {
-
-                    // Display prediction
                     output.value =
-                        "₹ " +
-                        data.prediction.toLocaleString("en-IN");
+                        error.message;
 
                 }
 
-                else {
-
-                    output.value = "Prediction failed";
-
-                }
-
-
             }
-
-            catch (error) {
-
-                console.error("Error:", error);
-
-                output.value = error.message;
-
-            }
-
-        });
+        );
 
     </script>
 
