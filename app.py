@@ -47,11 +47,11 @@ def predict():
     try:
 
         # Get values from HTML form
-        area = float(request.form.get("area"))
-        facing = request.form.get("facing")
-        floor = float(request.form.get("floor"))
-        bedrooms = float(request.form.get("bedrooms"))
-        car_parking = float(request.form.get("car_parking"))
+        Area_Sqft = float(request.form.get("area"))
+        Edit_face = request.form.get("facing")
+        Floor = float(request.form.get("floor"))
+        Bedrooms = float(request.form.get("bedrooms"))
+        Car_Parking_Sqft = float(request.form.get("car_parking"))
 
         # -----------------------------
         # Encode categorical variable
@@ -64,18 +64,20 @@ def predict():
             "South": 4
         }
 
-        facing_value = facing_map[facing]
+        facing_value = facing_map[Edit_face]
 
         # -----------------------------
         # Create model input
         # -----------------------------
 
         input_values = [
-            area,
-            facing_value,
-            floor,
-            bedrooms,
-            car_parking
+            Area_Sqft,
+            Floor,
+            Car_Parking_Sqft,
+            Bedrooms,
+            facing_value
+            
+            
         ]
 
         input_array = np.array(input_values).reshape(1, -1)
